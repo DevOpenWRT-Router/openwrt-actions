@@ -17,21 +17,22 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '.config'
+    # paths:
+    #   - '.config'
 #  schedule:
 #    - cron: 0 8 * * 5
 #  watch:
 #    types: started
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  # REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: -b openwrt-19.07 https://github.com/openwrt/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   CUSTOM_FEEDS_SH: custom-feeds.sh
   CUSTOM_CONFIG_SH: custom-config.sh
-  SSH_ACTIONS: false
+  SSH_ACTIONS: true
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   TZ: Asia/Shanghai
