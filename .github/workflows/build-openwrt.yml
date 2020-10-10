@@ -73,6 +73,15 @@ jobs:
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
+    - name: Update golang and upx
+      run: |
+        cd openwrt
+        
+        curl https://codeload.github.com/openwrt/packages/tar.gz/d5dc30fe8039e2c969443fc4024f4871b7a9c2f3 | \
+          tar -xz -C "feeds/packages/lang" --strip=2 packages-d5dc30fe8039e2c969443fc4024f4871b7a9c2f3/lang/golang
+        
+        git clone -b master --depth 1 https://github.com/kuoruan/openwrt-upx.git package/openwrt-upx
+
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
 
