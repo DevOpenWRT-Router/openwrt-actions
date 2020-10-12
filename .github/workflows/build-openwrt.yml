@@ -21,7 +21,7 @@ on:
 
 jobs:
   build:
-    name: Build ${{matrix.target}}
+    name: Build ${{ matrix.target }}
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
@@ -34,15 +34,13 @@ jobs:
 
     - name: Load Settings.ini
       run: |
-        source "${GITHUB_WORKSPACE}/configs/${{matrix.target}}/setting.ini"
-        echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
-        echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
-        echo "FEEDS_CONF=${FEEDS_CONF}" >> $GITHUB_ENV
-        echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
-        echo "UPLOAD_BIN_DIR=${UPLOAD_BIN_DIR}" >> $GITHUB_ENV
-        echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
-        echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV
-        echo "TZ=${TZ}" >> $GITHUB_ENV
+        source "$GITHUB_WORKSPACE/configs/${{ matrix.target }}/setting.ini"
+        echo "REPO_URL=${ REPO_URL }" >> $GITHUB_ENV
+        echo "REPO_BRANCH=${ REPO_BRANCH }" >> $GITHUB_ENV
+        echo "UPLOAD_BIN_DIR=${ UPLOAD_BIN_DIR }" >> $GITHUB_ENV
+        echo "UPLOAD_FIRMWARE=${ UPLOAD_FIRMWARE }" >> $GITHUB_ENV
+        echo "UPLOAD_RELEASE=${ UPLOAD_RELEASE }" >> $GITHUB_ENV
+        echo "TZ=${ TZ }" >> $GITHUB_ENV
 
     - name: Initialization environment
       env:
@@ -67,9 +65,9 @@ jobs:
 
     - name: Load custom feeds
       run: |
-        chmod +x configs/${{matrix.target}}/custom-feeds.sh
+        chmod +x configs/${{ matrix.target }}/custom-feeds.sh
         cd openwrt
-        $GITHUB_WORKSPACE/configs/${{matrix.target}}/custom-feeds.sh
+        $GITHUB_WORKSPACE/configs/${{ matrix.target }}/custom-feeds.sh
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -88,11 +86,11 @@ jobs:
 
     - name: Load custom configuration
       run: |
-        [ -e configs/${{matrix.target}}/files ] && mv configs/${{matrix.target}}/files openwrt/files
-        [ -e configs/${{matrix.target}}/.config ] && mv configs/${{matrix.target}}/.config openwrt/.config
-        chmod +x configs/${{matrix.target}}/custom-config.sh
+        [ -e configs/${{ matrix.target }}/files ] && mv configs/${{ matrix.target }}/files openwrt/files
+        [ -e configs/${{ matrix.target }}/.config ] && mv configs/${{ matrix.target }}/.config openwrt/.config
+        chmod +x configs/${{ matrix.target }}/custom-config.sh
         cd openwrt
-        $GITHUB_WORKSPACE/configs/${{matrix.target}}/custom-config.sh
+        $GITHUB_WORKSPACE/configs/${{ matrix.target }}/custom-config.sh
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -129,7 +127,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}_${{ matrix.target }}_${{ env.FILE_DATE }}
         path: openwrt/bin
 
     - name: Organize files
@@ -145,7 +143,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}_${{ matrix.target }}_${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Generate release tag
