@@ -12,4 +12,4 @@
 echo "Apply custom feeds"
 
 # Add a feed source
-# sed -i '$a src-git custom https://github.com/Suwmlee/openwrt-packages' feeds.conf.default
+sed -i '$a src-git custom https://github.com/Suwmlee/openwrt-packages' feeds.conf.default

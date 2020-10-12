@@ -26,7 +26,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [18-06,19-07]
+        include:
+          - name: Openwrt.org_18.06
+            target: 18-06 
+          - name: Openwrt.org_19.07
+            target: 19-07
 
     steps:
     - name: Checkout
@@ -123,6 +127,7 @@ jobs:
       id: organize
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
+        mv openwrt/.config ${{ matrix.target }}_config
         cd openwrt/bin/targets/*/*
         mv packages built-in
         mv built-in  ../../../packages
@@ -159,7 +164,7 @@ jobs:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         files: | 
           ${{ env.FIRMWARE }}/*
-          openwrt/.config
+          ${{ matrix.target }}_config
 
     - name: Remove old Artifacts
       uses: c-hive/gha-remove-artifacts@v1.2.0
