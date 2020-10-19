@@ -8,8 +8,8 @@ Thank P3TERX for [his template](https://github.com/P3TERX/Actions-OpenWrt)
 
 ## Usage
 
-- Use Github SSH to customize the `.config` file and it will be uploaded in release page
-- All packages will be uploaded in `Artifacts`, you can find all compiled `ipk` files
+- Use Github SSH to customize the `.config` file and it will be uploaded in [release page](https://github.com/Suwmlee/openwrt-actions/releases)
+- All packages will be uploaded in [`Artifacts`](https://github.com/Suwmlee/openwrt-actions/actions), you can find all compiled `ipk` files
 
 ### Tips
 
