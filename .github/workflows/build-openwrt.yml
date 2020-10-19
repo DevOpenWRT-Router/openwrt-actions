@@ -152,7 +152,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::${{ matrix.name }}-$(date +"%Y%m%d%H%M")"
+        echo "::set-output name=release_tag::$(date +"%Y%m%d%H")-${{ matrix.name }}"
         echo "::set-output name=status::success"
 
     - name: Upload firmware to release
@@ -170,7 +170,7 @@ jobs:
       uses: c-hive/gha-remove-artifacts@v1.2.0
       with:
         age: '1 day'
-        skip-recent: 4
+        skip-recent: 2
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.1.0
